@@ -6,56 +6,70 @@ library(MuMIn)
 library(factoextra)
 library(lme4)
 library(lmerTest)
+library(dplyr)
 
 ## All phylogenetic network analyses performed in the Julia package PhyloNetworks (see AspidoscelisReticAnalysis.jl)
 
 setwd("/path/to/gitHubRepo/Aspidoscelis-AmNat-2021/IndividualData")
 # Read in physiology data
 dat_phys_indiv <- read.csv("PhysiologyData_2019_Individuals.csv")
+# To get summary statistics:
+dat_phys_indiv %>% group_by(Sex) %>% group_by(Species) %>% summarize(m=mean(Endurance), sd=sd(Endurance), n=n(), ci=sd / sqrt(n))
+# Add means to dataframe:
+dat_phys_indiv <- dat_phys_indiv %>% 
+  group_by(Species) %>% 
+  mutate(AvgEndur = mean(Endurance))
 
 # ------------
 # Mixed-Effects Models
 # ------------
 
 # Effect of SexMode on response variables
-all_endur_lmer<-lmer(Log.Endurance~SexualMode+SVL +(1|Species), data=dat_phys_indiv, REML=T)
+## Note: we use the 
+all_endur_lmer<-lmer(Log.Endurance~SexualMode+SVL +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
+# check redidual distribution
+plot(all_endur_lmer)
 anova(all_endur_lmer)
 var.test(residuals(all_endur_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
+# Add residuals to dataframe
+dat_phys_indiv$endur_resid<-residuals(all_endur_lmer)
+# Obtain mean-scaled deviation measure
+dat_phys_indiv$endur_resid_scaled<-dat_phys_indiv$endur_resid / dat_phys_indiv$AvgEndur
 
 
-all_CIS3_lmer<-lmer(CI_State3~SexualMode +(1|Species), data=dat_phys_indiv, REML=T)
+all_CIS3_lmer<-lmer(CI_State3~SexualMode +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 anova(all_CIS3_lmer)
 leveneTest(residuals(all_CIS3_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 var.test(residuals(all_CIS3_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 
-all_CIS4_lmer<-lmer(CI_State4~SexualMode +(1|Species), data=dat_phys_indiv, REML=T)
+all_CIS4_lmer<-lmer(CI_State4~SexualMode +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 anova(all_CIS4_lmer)
 var.test(residuals(all_CIS4_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 
-all_CIRCR_lmer<-lmer(CI_RCR~SexualMode +(1|Species), data=dat_phys_indiv, REML=T)
+all_CIRCR_lmer<-lmer(CI_RCR~SexualMode +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 anova(all_CIRCR_lmer)
 var.test(residuals(all_CIRCR_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 
-all_CIIS3_lmer<-lmer(CII_State3~SexualMode +(1|Species), data=dat_phys_indiv, REML=T)
+all_CIIS3_lmer<-lmer(CII_State3~SexualMode +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 anova(all_CIIS3_lmer)
 var.test(residuals(all_CIIS3_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 
-all_CIIS4_lmer<-lmer(CII_State4~SexualMode +(1|Species), data=dat_phys_indiv, REML=T)
+all_CIIS4_lmer<-lmer(CII_State4~SexualMode +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 anova(all_CIIS4_lmer)
 var.test(residuals(all_CIIS4_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 
-all_CIIRCR_lmer<-lmer(CII_RCR~SexualMode +(1|Species), data=dat_phys_indiv, REML=T)
+all_CIIRCR_lmer<-lmer(CII_RCR~SexualMode +(1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 anova(all_CIIRCR_lmer)
 var.test(residuals(all_CIIRCR_lmer) ~ as.factor(dat_phys_indiv$SexualMode))
 
 
-# Endurancce-Respiration Relationship
-all_EndurCIS3_lmer<-  lmer(CI_State3  ~ Log.Endurance +(1|Species), data=dat_phys_indiv, REML=T)
-all_EndurCIS4_lmer<-  lmer(CI_State4  ~ Log.Endurance +(1|Species), data=dat_phys_indiv, REML=T)
-all_EndurCIRCR_lmer<- lmer(CI_RCR     ~ Log.Endurance +(1|Species), data=dat_phys_indiv, REML=T)
-all_EndurCIIS3_lmer<- lmer(CII_State3 ~ Log.Endurance +(1|Species), data=dat_phys_indiv, REML=T)
-all_EndurCIIS4_lmer<- lmer(CII_State4 ~ Log.Endurance +(1|Species), data=dat_phys_indiv, REML=T)
-all_EndurCIIRCR_lmer<-lmer(CII_RCR      ~ Log.Endurance +(1|Species), data=dat_phys_indiv, REML=T)
+# Endurance-Respiration Relationship
+all_EndurCIS3_lmer<-  lmer(Log.Endurance ~ CI_State3  + SVL + (1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
+all_EndurCIS4_lmer<-  lmer(Log.Endurance ~ CI_State4  + SVL + (1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
+all_EndurCIRCR_lmer<- lmer(Log.Endurance ~ CI_RCR     + SVL + (1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
+all_EndurCIIS3_lmer<- lmer(Log.Endurance ~ CII_State3 + SVL + (1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
+all_EndurCIIS4_lmer<- lmer(Log.Endurance ~ CII_State4 + SVL + (1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
+all_EndurCIIRCR_lmer<-lmer(Log.Endurance ~ CII_RCR    + SVL + (1|Species), data=dat_phys_indiv, REML=T, control=lmerControl(check.conv.singular = .makeCC(action = "ignore",  tol = 1e-4)))
 r.squaredGLMM(<insertModelHere>) # uses MuMIn package to get marginal (takes fixed effects into account) and conditional (which takes random and fixed effects into account) R^2. I'm using conditional.
 
 

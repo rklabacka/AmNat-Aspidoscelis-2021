@@ -28,9 +28,17 @@ dat_phys_indiv$SexualMode <- as.factor(dat_phys_indiv$SexualMode)
 # Get summary statistics:
 dat_phys_indiv %>% group_by(Sex) %>% group_by(Species) %>% summarize(m=mean(CII_State3), sd=sd(CII_State3), n=n(), ci=sd / sqrt(n))
 
-# --------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------
+#    -----------------------------------------------------------------------------------------------------
+# ----------------------------------     Section I: LME APPROACH     ----------------------------------
+#    ----------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------
+
 # Examine effect of sexual mode on response variables and perform model selection for one or two residual variance parameters
 
+## **********************
+## ****  Endurance  *****
+## **********************
 ## -- Model 1: No differences in variance between sexual modes
 endur_lme_1a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species)
 endur_lme_1b <- lme(Log.Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species)
@@ -62,9 +70,9 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t2* 0.09026297 -0.01074882  0.01597630
 
 
-# *************
-#  CI State 3
-# *************
+## ***********************
+## ****  CI State 3  *****
+## ***********************
 ## -- Model 1: No differences in variance between sexual modes
 CIS3_lme_1 <- lme(CI_State3 ~ SexualMode, data = dat_phys_indiv, random = ~ 1 | Species)
 ## -- Model 2: Differences in variance between sexual modes
@@ -89,9 +97,10 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t1* 4.772031 -0.2755333   0.5613797
 # t2* 4.510147 -0.3632354   0.8413166
 
-# *************
-#  CI State 4
-# *************
+
+## ***********************
+## ****  CI State 4  *****
+## ***********************
 ## -- Model 1: No differences in variance between sexual modes
 CIS4_lme_1 <- lme(CI_State4 ~ SexualMode, data = dat_phys_indiv, random = ~ 1 | Species)
 ## -- Model 2: Differences in variance between sexual modes
@@ -116,9 +125,9 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t1* 2.2594527 -0.1482513   0.3608133
 # t2* 0.7460734 -0.0938581   0.1872636
 
-# *************
-#  CI RCR
-# *************
+## ***********************
+## ****    CI RCR    *****
+## ***********************
 ## -- Model 1: No differences in variance between sexual modes
 CIRCR_lme_1 <- lme(CI_RCR ~ SexualMode, data = dat_phys_indiv, random = ~ 1 | Species)
 ## -- Model 2: Differences in variance between sexual modes
@@ -143,9 +152,9 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t1* 0.6864893 -0.07373868   0.1709778
 # t2* 0.8782012 -0.06456399   0.209786
 
-# *************
-#  CII State 3
-# *************
+## ***********************
+## ****  CII State 3 *****
+## ***********************
 ## -- Model 1: No differences in variance between sexual modes
 CIIS3_lme_1 <- lme(CII_State3 ~ SexualMode, data = dat_phys_indiv, random = ~ 1 | Species)
 ## -- Model 2: Differences in variance between sexual modes
@@ -170,9 +179,9 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t1* 4.531504 -0.2930536   0.6174195
 # t2* 2.490282 -0.3456246   0.4801312
 
-# *************
-#  CII State 4
-# *************
+## ***********************
+## ****  CII State 4 *****
+## ***********************
 ## -- Model 1: No differences in variance between sexual modes
 CIIS4_lme_1 <- lme(CII_State4 ~ SexualMode, data = dat_phys_indiv, random = ~ 1 | Species)
 ## -- Model 2: Differences in variance between sexual modes
@@ -197,9 +206,9 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t1* 3.290843 -0.2512533   0.5134656
 # t2* 1.321751 -0.1666855   0.3584912
 
-# *************
-#  CII RCR
-# *************
+## ***********************
+## ****    CII RCR   *****
+## ***********************
 ## -- Model 1: No differences in variance between sexual modes
 CIIRCR_lme_1 <- lme(CII_RCR ~ SexualMode, data = dat_phys_indiv, random = ~ 1 | Species)
 ## -- Model 2: Differences in variance between sexual modes
@@ -224,7 +233,35 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 # t1* 0.3590600 -0.05336864  0.08380936
 # t2* 0.2141631 -0.01807205  0.03937686
 
-# --------------------------------------------------------------------------------------------------------
+## ***********************
+## ****  Endur~Mito  *****
+## ***********************
+# Examine the relationship between endurance and respiration
+all_EndurCIS3_lme<-  lme(Endurance ~ CI_State3, random = ~ 1 | Species, data=dat_phys_indiv)
+rsquared(all_EndurCIS3_lme) # Marginal
+
+all_EndurCIS4_lme<-  lme(Log.Endurance ~ CI_State4, random = ~ 1 | Species, data=dat_phys_indiv)
+rsquared(all_EndurCIS4_lme) # Marginal
+
+all_EndurCIRCR_lme<-  lme(Log.Endurance ~ CI_RCR, random = ~ 1 | Species, data=dat_phys_indiv)
+rsquared(all_EndurCIRCR_lme) # Marginal
+
+all_EndurCIIS3_lme<-  lme(Log.Endurance ~ CII_State3, random = ~ 1 | Species, data=dat_phys_indiv)
+rsquared(all_EndurCIIS3_lme) # Marginal
+
+all_EndurCIIS4_lme<-  lme(Log.Endurance ~ CII_State4, random = ~ 1 | Species, data=dat_phys_indiv)
+rsquared(all_EndurCIIS4_lme) # Marginal
+
+all_EndurCIIRCR_lme<-  lme(Log.Endurance ~ CII_RCR, random = ~ 1 | Species, data=dat_phys_indiv)
+rsquared(all_EndurCIIRCR_lme) # Marginal
+
+
+
+# -----------------------------------------------------------------------------------------------------
+#    -----------------------------------------------------------------------------------------------------
+# ----------------------------------  Section II: MCMCglmm APPROACH   ---------------------------------
+#    ----------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------
 # Use Bayesian approach to examine differences in variance between mean-corrected variance (a.k.a., coefficient of variation)
 ## -- We did this for selected models which two residual variance parameters (see above)
 
@@ -245,7 +282,9 @@ BURN <- 3000; THIN <- 50; NITT <- BURN + nsample * THIN
 # Set up plotting environment
 par(mfrow=c(2,1))
 
-# Endurance -------------------------------------------------------
+## ***********************
+## ****   Endurance  *****
+## ***********************
 # Create model
 endur_b <- MCMCglmm(Log.Endurance ~ SexualMode + scSVL,
   random = ~ Species,
@@ -276,7 +315,9 @@ endur_b_postPlot <- postPlot(endur_cvdiffPost, xlim=c(-0.5,0.5),plotHist = FALSE
 endur_b_post <- mean(endur_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 abline(v=0, col="red", lwd=3)
 
-# CIS3 -------------------------------------------------------
+## ***********************
+## ****  CI State 3  *****
+## ***********************
 # Create model
 CIS3_b <- MCMCglmm(CI_State3 ~ SexualMode ,
   random = ~ Species,
@@ -307,7 +348,9 @@ postPlot(CIS3_cvdiffPost, xlim = c(-0.5, 0.5), plotHist = FALSE)
 CIS3_b_post <- mean(CIS3_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 abline(v=0, col="red", lwd=3)
 
-# CIS4 ----------------------------------------------------------------------------------------
+## ***********************
+## ****  CI State 4  *****
+## ***********************
 # Create model
 CIS4_b <- MCMCglmm(CI_State4 ~ SexualMode ,
   random = ~ Species,
@@ -339,7 +382,9 @@ postPlot(CIS4_cvdiffPost, xlim = c(-0.5, 0.5), plotHist = FALSE)
 CIS4_b_post <- mean(CIS4_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 abline(v=0, col="red", lwd=3)
 
-# CIRCR ----------------------------------------------------------------------------------------
+## ***********************
+## ****    CI RCR    *****
+## ***********************
 # Create model
 CIRCR_b <- MCMCglmm(CI_RCR ~ SexualMode ,
   random = ~ Species,
@@ -371,7 +416,9 @@ postPlot(CIRCR_cvdiffPost, xlim = c(-0.5, 0.5), plotHist = FALSE)
 CIRCR_b_post <- mean(CIRCR_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 abline(v=0, col="red", lwd=3)
 
-# CIIS3 ----------------------------------------------------------------------------------------
+## ***********************
+## ****  CII State 3 *****
+## ***********************
 # Create model
 CIIS3_b <- MCMCglmm(CII_State3 ~ SexualMode ,
   random = ~ Species,
@@ -403,7 +450,9 @@ postPlot(CIIS3_cvdiffPost, xlim = c(-0.5, 0.5), plotHist = FALSE)
 CIIS3_b_post <- mean(CIIS3_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 abline(v=0, col="red", lwd=3)
 
-# CIIS4 ----------------------------------------------------------------------------------------
+## ***********************
+## ****  CII State 4 *****
+## ***********************
 # Create model
 CIIS4_b <- MCMCglmm(CII_State4 ~ SexualMode ,
   random = ~ Species,
@@ -436,7 +485,9 @@ postPlot(CIIS4_cvdiffPost, xlim = c(-0.5, 0.5), plotHist = FALSE)
 CIIS4_b_post <- mean(CIIS4_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 abline(v=0, col="red", lwd=3)
 
-# CIIRCR ----------------------------------------------------------------------------------------
+## ***********************
+## ****    CII RCR   *****
+## ***********************
 # Create model
 CIIRCR_b <- MCMCglmm(CII_RCR ~ SexualMode ,
   random = ~ Species,
@@ -473,31 +524,14 @@ CIIRCR_hpd <- HPDinterval(CIIRCR_cvdiffPost)
 postPlot(CIIRCR_cvdiffPost, xlim = c(-0.5, 0.5), plotHist = FALSE)
 CIIRCR_b_post <- mean(CIIRCR_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
 
-# --------------------------------------------------------------------------------------------------------
-# Examine the relationship between endurance and respiration
-all_EndurCIS3_lme<-  lme(Endurance ~ CI_State3, random = ~ 1 | Species, data=dat_phys_indiv)
-rsquared(all_EndurCIS3_lme) # Marginal
 
-all_EndurCIS4_lme<-  lme(Log.Endurance ~ CI_State4, random = ~ 1 | Species, data=dat_phys_indiv)
-rsquared(all_EndurCIS4_lme) # Marginal
 
-all_EndurCIRCR_lme<-  lme(Log.Endurance ~ CI_RCR, random = ~ 1 | Species, data=dat_phys_indiv)
-rsquared(all_EndurCIRCR_lme) # Marginal
 
-all_EndurCIIS3_lme<-  lme(Log.Endurance ~ CII_State3, random = ~ 1 | Species, data=dat_phys_indiv)
-rsquared(all_EndurCIIS3_lme) # Marginal
-
-all_EndurCIIS4_lme<-  lme(Log.Endurance ~ CII_State4, random = ~ 1 | Species, data=dat_phys_indiv)
-rsquared(all_EndurCIIS4_lme) # Marginal
-
-all_EndurCIIRCR_lme<-  lme(Log.Endurance ~ CII_RCR, random = ~ 1 | Species, data=dat_phys_indiv)
-rsquared(all_EndurCIIRCR_lme) # Marginal
 # -----------------------------------------------------------------------------------------------------
-
-
-# ------------
-# Within-group ANCOVAs
-# ------------
+#    -----------------------------------------------------------------------------------------------------
+# --------------------------------  Section III: Within-group ANCOVAs   -------------------------------
+#    ----------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------
 
 # Subset data
 dat_phys_tess <- subset(dat_phys_indiv, Species == 'tesselata' | Species == 'marmorata' | Species == 'septemvittata')

@@ -31,7 +31,6 @@ dat_means = CSV.read("PhysiologyData_2019_Means.csv", DataFrame)
 
 # -----------------------------------------------------------------
 # Analyze Between Sexual Modes
-## Pagel's Lambda in theory captures within-species variation in the (1 - lambda) portion of the variance (see https://github.com/crsl4/PhyloNetworks.jl/issues/101)
 
 # Physiology phylolm
 PhyNetLM_endur = phylolm(@formula(LogEndurance ~ SexMode + SVL), dat_means, spe_net_rooted, y_mean_std=true, reml=false)

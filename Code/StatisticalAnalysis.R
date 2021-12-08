@@ -237,7 +237,7 @@ sds <- boot(dat_phys_indiv, bootFunc, R=1000)
 ## ****  Endur~Mito  *****
 ## ***********************
 # Examine the relationship between endurance and respiration
-all_EndurCIS3_lme<-  lme(Endurance ~ CI_State3, random = ~ 1 | Species, data=dat_phys_indiv)
+all_EndurCIS3_lme<-  lme(Log.Endurance ~ CI_State3, random = ~ 1 | Species, data=dat_phys_indiv)
 rsquared(all_EndurCIS3_lme) # Marginal
 
 all_EndurCIS4_lme<-  lme(Log.Endurance ~ CI_State4, random = ~ 1 | Species, data=dat_phys_indiv)
@@ -534,34 +534,34 @@ CIIRCR_b_post <- mean(CIIRCR_cvdiffPost > 0) # posterior probability that asexua
 # -----------------------------------------------------------------------------------------------------
 
 # Subset data
-dat_phys_tess <- subset(dat_phys_indiv, Species == 'tesselata' | Species == 'marmorata' | Species == 'septemvittata')
-dat_phys_neom <- subset(dat_phys_indiv, Species == 'neomexicana' | Species == 'marmorata' | Species == 'inornata')
-dat_phys_marm <- subset(dat_phys_indiv, Species == 'neomexicana' | Species == 'marmorata' | Species == 'tesselata')
+dat_phys_tess <- subset(dat_phys_indiv, Species == 'tesselatus' | Species == 'marmoratus' | Species == 'septemvittatus')
+dat_phys_neom <- subset(dat_phys_indiv, Species == 'neomexicanus' | Species == 'marmoratus' | Species == 'inornatus')
+dat_phys_marm <- subset(dat_phys_indiv, Species == 'neomexicanus' | Species == 'marmoratus' | Species == 'tesselatus')
 
 dat_phys_tess$Species <- factor(dat_phys_tess$Species, ordered=FALSE)
 dat_phys_neom$Species <- factor(dat_phys_neom$Species, ordered=FALSE)
 dat_phys_marm$Species <- factor(dat_phys_marm$Species, ordered=FALSE)
 
-tess_endur_lm <- lm(log(Endurance)~relevel(Species,ref="tesselata")+SVL, dat_phys_tess)
-tess_CIS3_lm <- lm(CI_State3~relevel(Species,ref="tesselata"), dat_phys_tess)
-tess_CIS4_lm <- lm(CI_State4~relevel(Species,ref="tesselata"), dat_phys_tess)
-tess_CIRCR_lm <- lm(CI_RCR~relevel(Species,ref="tesselata"), dat_phys_tess)
-tess_CIIS3_lm <- lm(CII_State3~relevel(Species,ref="tesselata"), dat_phys_tess)
-tess_CIIS4_lm <- lm(CII_State4~relevel(Species,ref="tesselata"), dat_phys_tess)
-tess_CIIRCR_lm <- lm(CII_RCR~relevel(Species,ref="tesselata"), dat_phys_tess)
+tess_endur_lm <- lm(Log.Endurance~relevel(Species,ref="tesselatus")+SVL, dat_phys_tess)
+tess_CIS3_lm <- lm(CI_State3~relevel(Species,ref="tesselatus"), dat_phys_tess)
+tess_CIS4_lm <- lm(CI_State4~relevel(Species,ref="tesselatus"), dat_phys_tess)
+tess_CIRCR_lm <- lm(CI_RCR~relevel(Species,ref="tesselatus"), dat_phys_tess)
+tess_CIIS3_lm <- lm(CII_State3~relevel(Species,ref="tesselatus"), dat_phys_tess)
+tess_CIIS4_lm <- lm(CII_State4~relevel(Species,ref="tesselatus"), dat_phys_tess)
+tess_CIIRCR_lm <- lm(CII_RCR~relevel(Species,ref="tesselatus"), dat_phys_tess)
 
-neom_endur_lm <- lm(log(Endurance)~relevel(Species,ref="neomexicana")+SVL, dat_phys_neom)
-neom_CIS3_lm <- lm(CI_State3~relevel(Species,ref="neomexicana"), dat_phys_neom)
-neom_CIS4_lm <- lm(CI_State4~relevel(Species,ref="neomexicana"), dat_phys_neom)
-neom_CIRCR_lm <- lm(CI_RCR~relevel(Species,ref="neomexicana"), dat_phys_neom)
-neom_CIIS3_lm <- lm(CII_State3~relevel(Species,ref="neomexicana"), dat_phys_neom)
-neom_CIIS4_lm <- lm(CII_State4~relevel(Species,ref="neomexicana"), dat_phys_neom)
-neom_CIIRCR_lm <- lm(CII_RCR~relevel(Species,ref="neomexicana"), dat_phys_neom)
+neom_endur_lm <- lm(Log.Endurance~relevel(Species,ref="neomexicanus")+SVL, dat_phys_neom)
+neom_CIS3_lm <- lm(CI_State3~relevel(Species,ref="neomexicanus"), dat_phys_neom)
+neom_CIS4_lm <- lm(CI_State4~relevel(Species,ref="neomexicanus"), dat_phys_neom)
+neom_CIRCR_lm <- lm(CI_RCR~relevel(Species,ref="neomexicanus"), dat_phys_neom)
+neom_CIIS3_lm <- lm(CII_State3~relevel(Species,ref="neomexicanus"), dat_phys_neom)
+neom_CIIS4_lm <- lm(CII_State4~relevel(Species,ref="neomexicanus"), dat_phys_neom)
+neom_CIIRCR_lm <- lm(CII_RCR~relevel(Species,ref="neomexicanus"), dat_phys_neom)
 
-marm_endur_lm <- lm(log(Endurance)~relevel(Species,ref="marmorata")+SVL, dat_phys_marm)
-marm_CIS3_lm <- lm(CI_State3~relevel(Species,ref="marmorata"), dat_phys_marm)
-marm_CIS4_lm <- lm(CI_State4~relevel(Species,ref="marmorata"), dat_phys_marm)
-marm_CIRCR_lm <- lm(CI_RCR~relevel(Species,ref="marmorata"), dat_phys_marm)
-marm_CIIS3_lm <- lm(CII_State3~relevel(Species,ref="marmorata"), dat_phys_marm)
-marm_CIIS4_lm <- lm(CII_State4~relevel(Species,ref="marmorata"), dat_phys_marm)
-marm_CIIRCR_lm <- lm(CII_RCR~relevel(Species,ref="marmorata"), dat_phys_marm)
+marm_endur_lm <- lm(Log.Endurance~relevel(Species,ref="marmoratus")+SVL, dat_phys_marm)
+marm_CIS3_lm <- lm(CI_State3~relevel(Species,ref="marmoratus"), dat_phys_marm)
+marm_CIS4_lm <- lm(CI_State4~relevel(Species,ref="marmoratus"), dat_phys_marm)
+marm_CIRCR_lm <- lm(CI_RCR~relevel(Species,ref="marmoratus"), dat_phys_marm)
+marm_CIIS3_lm <- lm(CII_State3~relevel(Species,ref="marmoratus"), dat_phys_marm)
+marm_CIIS4_lm <- lm(CII_State4~relevel(Species,ref="marmoratus"), dat_phys_marm)
+marm_CIIRCR_lm <- lm(CII_RCR~relevel(Species,ref="marmoratus"), dat_phys_marm)

@@ -2,6 +2,21 @@
 
 Klabacka et al. (2021) measured the endurance capacity and mitochondrial respiration of five Aspidoscelis lizards, comparing sexual and asexual species and examining the relationship between endurance and mitochondrial respiration. This repository houses the data and coding files for the analyses.
 
+# Code Orientation
+
+Three code files contain the commands used for data analysis
+
+1. StatisticalAnalysis.R
+    - Linear mixed-effects models for examining: + Effect of hybrid asexuality on each response variable + Differences in variation between hybrid asexual and parental sexual species + The effect of mitochondrial respiration on endurance capacity - Bayesian models to examine differences in mean-corrected variance - Linear models for subgroups based on mitochondrial history and parentage
+
+1. StatisticalAnalysis.jl
+    - Phylogenetic network linear models for examining:
+        + Effect of hybrid asexuality on each response variable
+        + The effect of mitochondrial respiration on endurance capacity
+
+1. PhyloNet_ML.nex
+    - Input file for PhyloNet containing paternal and maternal gene trees and PhyloNet command for estimating inferring the phylogenetic network using maximum likelihood.
+
 
 # Analyses System Requirements
 

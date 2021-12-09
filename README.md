@@ -2,44 +2,6 @@
 
 Klabacka et al. (2021) measured the endurance capacity and mitochondrial respiration of five Aspidoscelis lizards, comparing sexual and asexual species and examining the relationship between endurance and mitochondrial respiration. This repository houses the data and coding files for the analyses.
 
-# Data Orientation
-
-The data are contained within several files/directories:
-
-1.  PhysiologyData_2019_Individuals.csv
-    - This file contains all individuals (rows) and their values for each respective variable (columns).
-    - Variables:
-        + **FIELD** : Field ID
-        + **Species** : Specific epithet (all individuals belong to genus Aspidoscelis) 
-        + **Sex**
-        + **SexualMode** : Mode of reproduction (sexual / asexual)
-        + **STATE**
-        + **COUNTY**
-        + **CITY**
-        + **LOCAL** : Specific location where individual was found
-        + **LAT** : Latitude (decimal coordinate)
-        + **LONG** : Longitude (decimal coordinate)
-        + **Order** : Order lizards were ran within a day
-        + **DateRan** : Assigned day lizards were ran
-        + **Endurance** : Length of time (minutes) lizard ran
-        + **Log.Endrance** : Log(10)-transformed Endurance value
-        + **MitoDate** : Assigned day lizards were euthanized and mito respiration measured 
-        + **EuthanasiaTime** : Time (24 hr) lizard was euthanized
-        + **DisLength** : Length of time (minutes) from euthanasia to removal of all skeletal muscle from fore- and hindlimbs
-        + **MitoMuscleMass** : Mass (g) of muscle used for mitochondrial respiration
-        + **TotalMuscleMass** : Total mass (g) of skeletal muscle from fore- and hindlimbs
-        + **TotalMass** : Total mass (g) of lizard
-        + **SVL** : Snout-vent length
-        + **CI_State3** : State 3 respiration initiated through mitochondrial Complex I
-        + **CI_State4** : State 4 respiration initiated through mitochondrial Complex I
-        + **CI_RCR** : State 3 / State 4 for respiration initiated through mitochondrial Complex I
-        + **CII_State3** : State 3 respiration initiated through mitochondrial Complex II
-        + **CII_State4** : State 4 respiration initiated through mitochondrial Complex II
-        + **CII_RCR** : State 3 / State 4 for respiration initiated through mitochondrial Complex II
-1.  PhysiologyData_2019_Means.csv 
-1.  RawMitoData/\*.csv 
-1.  Mitochondria Bradford Data.xlsx
-1.  RCR calculations_Lizard Endruance Study 2019.xlsx
 
 # Analyses System Requirements
 
@@ -64,3 +26,79 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 
 
 
+# Data Orientation
+
+The data are contained within several files/directories:
+
+1.  PhysiologyData_2019_Individuals.csv
+    - This file contains all individuals (rows) and their values for each respective variable (columns).
+    - These data were used for the linear mixed-effects models.
+    - Variables:
+        + **FIELD** : Field ID
+        + **Species** : Specific epithet (all individuals belong to genus Aspidoscelis) 
+        + **Sex**
+        + **SexualMode** : Mode of reproduction (sexual / asexual)
+        + **STATE**
+        + **COUNTY**
+        + **CITY**
+        + **LOCAL** : Specific location where individual was found
+        + **LAT** : Latitude (decimal coordinate)
+        + **LONG** : Longitude (decimal coordinate)
+        + **Order** : Order lizards were ran within a day
+        + **DateRan** : Assigned day lizards were ran
+        + **Endurance** : Length of time (minutes) lizard ran
+        + **Log.Endrance** : Log(10)-transformed Endurance value
+        + **MitoDate** : Assigned day lizards were euthanized and mito respiration measured 
+        + **EuthanasiaTime** : Time (24 hr) lizard was euthanized
+        + **DisLength** : Length of time (minutes) from euthanasia to removal of all skeletal muscle from fore- and hindlimbs
+        + **MitoMuscleMass** : Mass (g) of muscle used for mitochondrial respiration
+        + **TotalMuscleMass** : Total mass (g) of skeletal muscle from fore- and hindlimbs
+        + **TotalMass** : Total mass (g) of lizard
+        + **SVL** : Snout-vent length
+        + **CI_State3** : State 3 respiration (nmoles oxygen consumed per minute per milligram of protein) initiated through mitochondrial Complex I
+        + **CI_State4** : State 4 respiration (nmoles oxygen consumed per minute per milligram of protein) initiated through mitochondrial Complex I
+        + **CI_RCR** : State 3 / State 4 for respiration initiated through mitochondrial Complex I
+        + **CII_State3** : State 3 respiration (nmoles oxygen consumed per minute per milligram of protein) initiated through mitochondrial Complex II
+        + **CII_State4** : State 4 respiration (nmoles oxygen consumed per minute per milligram of protein) initiated through mitochondrial Complex II
+        + **CII_RCR** : State 3 / State 4 for respiration initiated through mitochondrial Complex II
+
+1.  PhysiologyData_2019_Means.csv 
+    - This file contains all species (rows) and their variable values (columns).
+    - These data were used for the phylogenetic network linear models.
+    - Where values are means of variables, see the variable descriptions above
+    - Variables:
+        + **tipNames** : Specific epithet
+        + **Endurance** : Mean Endurance
+        + **Log.Endurance** : Log(10)-transformed mean endurance capacity
+        + **DisLength** : Mean DisLength 
+        + **MitoMuscleMass** : Mean MitoMuscleMass
+        + **TotalMuscleMass** : Mean TotalMuscleMass
+        + **TotalMass** : Mean TotalMass
+        + **SVL** : Mean SVL
+        + **CI_State3** : Mean CI_State3
+        + **CI_State3_n** : Number of individuals measured for CI_State3
+        + **CI_State3_sd** : Standard deviation for CI_State3
+        + **CI_State4** : Mean CI_State4
+        + **CI_State4_n** : Number of individuals measured for CI_State3
+        + **CI_State4_sd** : Standard deviation for CI_State3
+        + **CI_RCR** : Mean CI_RCR
+        + **CI_RCR_n** : Number of individuals measured for CI_State3
+        + **CI_RCR_sd** : Standard deviation for CI_State3
+        + **CII_State3** : Mean CII_State3
+        + **CII_State3_n** : Number of individuals measured for CI_State3
+        + **CII_State3_sd** : Standard deviation for CI_State3
+        + **CII_State4** : Mean CII_State4
+        + **CII_State4_n** : Number of individuals measured for CII_State3
+        + **CII_State4_sd** : Standard deviation for CII_State3
+        + **CII_RCR** : Mean CII_RCR
+        + **CII_RCR_n** : Number of individuals measured for CII_State3
+        + **CII_RCR_sd** : Standard deviation for CII_State3
+
+1.  RawMitoData/\*.csv 
+    - Plotted oxygen consumption for isolated mitochondria of each individual
+
+1.  Mitochondria Bradford Data.xlsx
+    - Protein concentrations from Bradford assay of isolated mitochondria (for respiration normalization)
+
+1.  RCR calculations_Lizard Endruance Study 2019.xlsx
+    - Normalization of respiration data and calculation of RCR

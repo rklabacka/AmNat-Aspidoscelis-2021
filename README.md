@@ -7,7 +7,35 @@ Klabacka et al. (2021) measured the endurance capacity and mitochondrial respira
 The data are contained within several files/directories:
 
 1.  PhysiologyData_2019_Individuals.csv
-    This file contains all individuals (rows) and their values for each respective variable (columns).
+    - This file contains all individuals (rows) and their values for each respective variable (columns).
+    - Variables:
+        + **FIELD** : Field ID
+        + **Species** : Specific epithet (all individuals belong to genus Aspidoscelis) 
+        + **Sex**
+        + **SexualMode** : Mode of reproduction (sexual / asexual)
+        + **STATE**
+        + **COUNTY**
+        + **CITY**
+        + **LOCAL** : Specific location where individual was found
+        + **LAT** : Latitude (decimal coordinate)
+        + **LONG** : Longitude (decimal coordinate)
+        + **Order** : Order lizards were ran within a day
+        + **DateRan** : Assigned day lizards were ran
+        + **Endurance** : Length of time (minutes) lizard ran
+        + **Log.Endrance** : Log(10)-transformed Endurance value
+        + **MitoDate** : Assigned day lizards were euthanized and mito respiration measured 
+        + **EuthanasiaTime** : Time (24 hr) lizard was euthanized
+        + **DisLength** : Length of time (minutes) from euthanasia to removal of all skeletal muscle from fore- and hindlimbs
+        + **MitoMuscleMass** : Mass (g) of muscle used for mitochondrial respiration
+        + **TotalMuscleMass** : Total mass (g) of skeletal muscle from fore- and hindlimbs
+        + **TotalMass** : Total mass (g) of lizard
+        + **SVL** : Snout-vent length
+        + **CI_State3** : State 3 respiration initiated through mitochondrial Complex I
+        + **CI_State4** : State 4 respiration initiated through mitochondrial Complex I
+        + **CI_RCR** : State 3 / State 4 for respiration initiated through mitochondrial Complex I
+        + **CII_State3** : State 3 respiration initiated through mitochondrial Complex II
+        + **CII_State4** : State 4 respiration initiated through mitochondrial Complex II
+        + **CII_RCR** : State 3 / State 4 for respiration initiated through mitochondrial Complex II
 1.  PhysiologyData_2019_Means.csv 
 1.  RawMitoData/\*.csv 
 1.  Mitochondria Bradford Data.xlsx

@@ -20,7 +20,7 @@ In order to run the analyses, [julia](https://julialang.org/downloads/) and [R](
 
 Once you install julia, installing software packages is simply: 
 
-    $ using Pkg
+        $ using Pkg
     $ Pkg.add("<package-name>")
 
 The julia packages [PhyloNetworks](http://crsl4.github.io/PhyloNetworks.jl/latest/man/installation/), [PhyloPlots](https://github.com/cecileane/PhyloPlots.jl), [CSV](https://juliapackages.com/p/csv), [StatsModels](https://juliastats.org/StatsModels.jl/stable/), [GLM](https://juliapackages.com/p/glm), and [DataFrames](https://dataframes.juliadata.org/stable/) are required. 

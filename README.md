@@ -2,7 +2,7 @@
 
 Klabacka et al. (2021) measured the endurance capacity and mitochondrial respiration of five Aspidoscelis lizards, comparing sexual and asexual species and examining the relationship between endurance and mitochondrial respiration. This repository houses the data and coding files for the analyses.
 
-# Code Orientation
+## Code Orientation
 
 Three code files contain the commands used for data analysis
 
@@ -14,11 +14,7 @@ Three code files contain the commands used for data analysis
         + Effect of hybrid asexuality on each response variable
         + The effect of mitochondrial respiration on endurance capacity
 
-1. PhyloNet_ML.nex
-    - Input file for PhyloNet containing paternal and maternal gene trees and PhyloNet command for estimating inferring the phylogenetic network using maximum likelihood.
-
-
-# Analyses System Requirements
+### Analyses System Requirements
 
 In order to run the analyses, [julia](https://julialang.org/downloads/) and [R](https://cran.r-project.org/doc/manuals/r-release/R-admin.html) are required languages.
 
@@ -40,10 +36,43 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 [PhyloNet](http://old-bioinfo.cs.rice.edu/phylonet/#Downloads) (a standalone software package) is also required.
 
 
+### Data Analysis Walk-through
 
-# Data Orientation
+1.  Within terminal navigate to the Code directory of the repository
 
-The data are contained within several files/directories:
+    $ cd AmNat-Aspidoscelis-2021/Code
+
+    Within this directory you can see the code files. I recommend opening them and running them within an interactive R environment (as shown in this walk-through)
+
+1.  Begin R session
+
+    $ R
+
+1.  Read in and prepare the data 
+
+    > dat_phys_indiv <- read.csv("../SampleInformation/PhysiologyData_2019_Individuals.csv")
+    > dat_phys_indiv$scSVL <- scale(dat_phys_indiv$SVL)
+    > dat_phys_indiv$SexualMode <- as.factor(dat_phys_indiv$SexualMode)
+    > head(dat_phys_indiv)
+
+1.  Get summary statistics from data
+    
+    > library(tidyverse)
+    > dat_phys_indiv %>% group_by(Sex) %>% group_by(Species) %>% summarize(m=mean(CII_State3), sd=sd(CII_State3), n=n(), ci=sd / sqrt(n))
+
+1.  Create linear mixed-effects model and fit data to model
+    note: This is just one of the models from the code used as an example. 
+    For all linear mixed-effects models, see StatisticalAnalyses.R
+    
+    > library(nlme)
+    > endur_lme_1a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species) 
+    > summary(endur_lme_1a)
+
+1.  See if log-transformed data better fits the model
+    
+    > endur_lme_1b <- lme(Log.Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species)
+
+## SampleInformation
 
 1.  PhysiologyData_2019_Individuals.csv
     - This file contains all individuals (rows) and their values for each respective variable (columns).
@@ -109,6 +138,8 @@ The data are contained within several files/directories:
         + **CII_RCR_n** : Number of individuals measured for CII_State3
         + **CII_RCR_sd** : Standard deviation for CII_State3
 
+## Mitochondrial Physiology
+
 1.  RawMitoData/\*.csv 
     - Plotted oxygen consumption for isolated mitochondria of each individual
 
@@ -117,3 +148,21 @@ The data are contained within several files/directories:
 
 1.  RCR calculations_Lizard Endruance Study 2019.xlsx
     - Normalization of respiration data and calculation of RCR
+
+## Phylogenetics
+
+### IQ-Tree
+
+1. mito.nex
+    - Sequence alignment of mitochondrial data used for phylogeny estimation
+
+1.  mito.tre 
+    - Mitochondrial consensus tree estimated from IQ-Tree
+
+### PhyloNet
+
+1. PhyloNet_ML.nex
+    - Input for Phylonet with gene trees and parameters
+
+1. network.tre
+    - Phylogenetic network estimated from PhyloNet

@@ -1,0 +1,15 @@
+#NEXUS
+ 
+BEGIN TREES;
+
+Tree PatTree = (((inornatus:0.0009449267,neomexicanus:0.008138713):0.1005275,(septemvittatus:0.0009449267,tesselatus:0.007980767):0.1043029):0.0925910185,marmoratus:0.0935359452);
+Tree MatTree = ((inornatus:0.101472437,septemvittatus:0.1052478126):0.0925910185,(marmoratus:0.0009449267,(neomexicanus:0.002841587,tesselatus:0.0026836411):0.0052971259):0.0925910185);
+ 
+END;
+ 
+ 
+BEGIN PHYLONET;
+ 
+InferNetwork_ML (MatTree, PatTree) 2 -x 10 -di;
+ 
+END;

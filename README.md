@@ -46,29 +46,29 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 
 ## Data Analysis Walk-through
 
-Within terminal navigate to the Code directory of the repository:
+1- Within terminal navigate to the Code directory of the repository:
 
     $ cd AmNat-Aspidoscelis-2021/Code
 
 Within this directory you can see the code files. I recommend opening them and running them within an interactive R environment (as shown in this walk-through)
 
-Begin R session:
+2- Begin R session:
 
     $ R
 
-Read in and prepare the data: 
+3- Read in and prepare the data: 
 
     > dat_phys_indiv <- read.csv("../SampleInformation/PhysiologyData_2019_Individuals.csv")
     > dat_phys_indiv$scSVL <- scale(dat_phys_indiv$SVL)
     > dat_phys_indiv$SexualMode <- as.factor(dat_phys_indiv$SexualMode)
     > head(dat_phys_indiv)
 
-Get summary statistics from data:
+4- Get summary statistics from data:
     
     > library(tidyverse)
     > dat_phys_indiv %>% group_by(Sex) %>% group_by(Species) %>% summarize(m=mean(CII_State3), sd=sd(CII_State3), n=n(), ci=sd / sqrt(n))
 
-Create linear mixed-effects model and fit data to model:
+5- Create linear mixed-effects model and fit data to model:
     
     > library(nlme)
     > endur_lme_1a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species) 
@@ -77,14 +77,14 @@ Create linear mixed-effects model and fit data to model:
 This is just one of the models from the code used as an example. 
 For all linear mixed-effects models, see StatisticalAnalyses.R
 
-See if data better fits model with differing residual variation:
+6- See if data better fits model with differing residual variation:
     
     > endur_lme_2a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     > # compare models
     > anova(endur_lme_1a, endur_lme_2a)
     > # low p-value supports model 2a
 
-See if log-transformed data better fits the model:
+7- See if log-transformed data better fits the model:
     
     > endur_lme_2b <- lme(Log.Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     > # plot residuals from models
@@ -92,7 +92,7 @@ See if log-transformed data better fits the model:
     > plot(endur_lme_2b)
     > # clustering noticably decreased in model 2b
 
-Perform bootstrapping to get confidence intervals of residual standard deviations:
+8- Perform bootstrapping to get confidence intervals of residual standard deviations:
 
     > library(boot)
     > # Create boot function containing linear mixed-effects model
@@ -112,7 +112,95 @@ Perform bootstrapping to get confidence intervals of residual standard deviation
     > # call function
     > sds <- boot(dat_phys_indiv, bootFunc, R=1000)
     > sds
+  
+Steps 6 & 8 should be performed for each variable
+
+9- Examine the relationship between endurance and mitochondrial respiration: 
+
+    > all_EndurCIS3_lme<-  lme(Log.Endurance ~ CI_State3, random = ~ 1 | Species, data=dat_phys_indiv)
+    > summary(all_EndurCIS3_lme)
+    > rsquared(all_EndurCIS3_lme)
+    > # use marginal 
+
+This step should be performed for each variable of mito respiration
+
+10- Now load librares to use a Bayesian approach to examine differences in variability between mean-corrected values of variation:
+
+    > library(MCMCglmm)
+    > library(wolakR)
+
+11 - Set non-informative priors for residual variances:
+
+    > # single variance value
+    > pr1 <- list(R = list(V = 1e-12, nu = -2), G = list(G1 = list(V = diag(1), nu = 1, alpha.mu = c(0), alpha.V = diag(1)*1000)))
+    > # two variance values
+    > pr2 <- list(R = list(V = diag(2)*1e-12, nu = -1), G = list(G1 = list(V = diag(1), nu = 1, alpha.mu = c(0), alpha.V = diag(1)*1000)))
+
+12- Set MCMC chain parameters:
+
+    > nsample <- 1000
+    > BURN <- 3000; THIN <- 50; NITT <- BURN + nsample * THIN
+
+13- Set plotting environment:
     
+    > par(mfrow=c(2,1))
+
+14- Create model:
+
+    > endur_b <- MCMCglmm(Log.Endurance ~ SexualMode + scSVL,
+    >   random = ~ Species,
+    >   rcov = ~ idh(SexualMode):units,
+    >   data = dat_phys_indiv,
+    >   prior = pr2,
+    >   nitt = NITT, burnin = BURN, thin = THIN)
+
+15- Plot standard deviations for each repro mode:
+
+    > endur_b_sdPost <- sqrt(endur_b$VCV)
+    > # Get mean values
+    > mean(endur_b_sdPost[, 2])
+    > mean(endur_b_sdPost[, 3])
+    > # Get confidence intervals
+    > endur_b_sd_hpd <- HPDinterval(endur_b_sdPost)
+    > # Plot posterior distributions
+    > par(mfrow=c(2,1))
+    > endur_asex_sd <- postPlot(endur_b_sdPost[, 2], xlim = c(0, 0.40))
+    > # add sd determined from frequentist approach
+    > abline(v=0.09, col="red", lwd=3)
+    > endur_sex_sd <- postPlot(endur_b_sdPost[, 3], xlim = c(0, 0.40))
+    > abline(v=0.18, col="red", lwd=3)
+
+Look at plot!
+The two plots show the posterior distribution of standard deviations for asexual species (top) and sexual species (bottom)
+
+
+16- Plot differences between coefficient of variation:
+
+    > endur_cvdiffPost <- ((sqrt(endur_b$VCV[, 3]) / (endur_b$Sol[, 1] + endur_b$Sol[, 2]) - sqrt(endur_b$VCV[, 2]) / endur_b$Sol[, 1]))
+    > endur_hpd <- HPDinterval(endur_cvdiffPost)
+    > endur_b_postPlot <- postPlot(endur_cvdiffPost, xlim=c(-0.5,0.5),plotHist = FALSE)
+    > endur_b_post <- mean(endur_cvdiffPost > 0) # posterior probability that asexual coefficient of variance < sexual
+    > abline(v=0, col="red", lwd=3)
+
+Look at plot!
+This is the difference in posterior distributions between the coefficient of variation.
+A distribution whose center is greater than 0 shows greater mean-corrected variation in the sexual species
+
+Steps 14-16 should be performed for each variable of mito respiration
+
+17- Subset and prepare data for within-group linear modeling:
+
+    > dat_phys_tess <- subset(dat_phys_indiv, Species == 'tesselatus' | Species == 'marmoratus' | Species == 'septemvittatus')
+    > # convert species to factor
+    > dat_phys_tess$Species <- factor(dat_phys_tess$Species, ordered=FALSE)
+
+18- Examine effect of species on log.endurance:
+
+    > tess_endur_lm <- lm(Log.Endurance~relevel(Species,ref="tesselatus")+SVL, dat_phys_tess) 
+
+Steps 17 and 18 should be done for each subgroup and each variable
+
+
 
 # Sample Information
 

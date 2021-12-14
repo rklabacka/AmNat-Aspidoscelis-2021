@@ -42,9 +42,9 @@ Within terminal navigate to the Code directory of the repository:
 
     $ cd AmNat-Aspidoscelis-2021/Code
 
-    Within this directory you can see the code files. I recommend opening them and running them within an interactive R environment (as shown in this walk-through)
+Within this directory you can see the code files. I recommend opening them and running them within an interactive R environment (as shown in this walk-through)
 
-1.  Begin R session:
+Begin R session:
 
     $ R
 
@@ -55,28 +55,28 @@ Read in and prepare the data:
     > dat_phys_indiv$SexualMode <- as.factor(dat_phys_indiv$SexualMode)
     > head(dat_phys_indiv)
 
-1.  Get summary statistics from data:
+Get summary statistics from data:
     
     > library(tidyverse)
     > dat_phys_indiv %>% group_by(Sex) %>% group_by(Species) %>% summarize(m=mean(CII_State3), sd=sd(CII_State3), n=n(), ci=sd / sqrt(n))
 
-1.  Create linear mixed-effects model and fit data to model:
+Create linear mixed-effects model and fit data to model:
     
     > library(nlme)
     > endur_lme_1a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species) 
     > summary(endur_lme_1a)
 
-    note: This is just one of the models from the code used as an example. 
-    For all linear mixed-effects models, see StatisticalAnalyses.R
+This is just one of the models from the code used as an example. 
+For all linear mixed-effects models, see StatisticalAnalyses.R
 
-1.  See if data better fits model with differing residual variation:
+See if data better fits model with differing residual variation:
     
     > endur_lme_2a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     > # compare models
     > anova(endur_lme_1a, endur_lme_2a)
     > # low p-value supports model 2a
 
-1.  See if log-transformed data better fits the model:
+See if log-transformed data better fits the model:
     
     > endur_lme_2b <- lme(Log.Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     > # plot residuals from models
@@ -84,7 +84,7 @@ Read in and prepare the data:
     > plot(endur_lme_2b)
     > # clustering noticably decreased in model 2b
 
-1.  Perform bootstrapping to get confidence intervals of residual standard deviations:
+Perform bootstrapping to get confidence intervals of residual standard deviations:
 
     > library(boot)
     > # Create boot function containing linear mixed-effects model

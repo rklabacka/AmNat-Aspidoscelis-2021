@@ -5,8 +5,12 @@ Klabacka et al. (2021) measured the endurance capacity and mitochondrial respira
 # Contents
 -   [Code Orientation](#code-orientation)
     -   [System Requirements](#system-requirements)
+    -   [Data Analysis Walk-through](#walk-through)
+-   [Sample Information](#sample-information)   
+-   [Mitochondrial Physiology](#mito-physiology)
+-   [Phylogenetics](#phylogenetics)
 
-## Code Orientation
+# Code Orientation
 
 Three code files contain the commands used for data analysis
 
@@ -18,7 +22,7 @@ Three code files contain the commands used for data analysis
         + Effect of hybrid asexuality on each response variable
         + The effect of mitochondrial respiration on endurance capacity
 
-### System Requirements
+## System Requirements
 
 In order to run the analyses, [julia](https://julialang.org/downloads/) and [R](https://cran.r-project.org/doc/manuals/r-release/R-admin.html) are required languages.
 
@@ -40,7 +44,7 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 [PhyloNet](http://old-bioinfo.cs.rice.edu/phylonet/#Downloads) (a standalone software package) is also required.
 
 
-### Data Analysis Walk-through
+## Data Analysis Walk-through
 
 Within terminal navigate to the Code directory of the repository:
 
@@ -110,7 +114,7 @@ Perform bootstrapping to get confidence intervals of residual standard deviation
     > sds
     
 
-## SampleInformation
+# Sample Information
 
 1.  PhysiologyData_2019_Individuals.csv
     - This file contains all individuals (rows) and their values for each respective variable (columns).
@@ -176,7 +180,7 @@ Perform bootstrapping to get confidence intervals of residual standard deviation
         + **CII_RCR_n** : Number of individuals measured for CII_State3
         + **CII_RCR_sd** : Standard deviation for CII_State3
 
-## Mitochondrial Physiology
+# Mitochondrial Physiology
 
 1.  RawMitoData/\*.csv 
     - Plotted oxygen consumption for isolated mitochondria of each individual
@@ -187,9 +191,9 @@ Perform bootstrapping to get confidence intervals of residual standard deviation
 1.  RCR calculations_Lizard Endruance Study 2019.xlsx
     - Normalization of respiration data and calculation of RCR
 
-## Phylogenetics
+# Phylogenetics
 
-### IQ-Tree
+## IQ-Tree
 
 1. mito.nex
     - Sequence alignment of mitochondrial data used for phylogeny estimation
@@ -197,7 +201,7 @@ Perform bootstrapping to get confidence intervals of residual standard deviation
 1.  mito.tre 
     - Mitochondrial consensus tree estimated from IQ-Tree
 
-### PhyloNet
+## PhyloNet
 
 1. PhyloNet_ML.nex
     - Input for Phylonet with gene trees and parameters

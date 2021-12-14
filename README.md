@@ -18,7 +18,7 @@ Three code files contain the commands used for data analysis
         + Effect of hybrid asexuality on each response variable
         + The effect of mitochondrial respiration on endurance capacity
 
-### Analyses System Requirements
+### System Requirements
 
 In order to run the analyses, [julia](https://julialang.org/downloads/) and [R](https://cran.r-project.org/doc/manuals/r-release/R-admin.html) are required languages.
 

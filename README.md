@@ -2,6 +2,9 @@
 
 Klabacka et al. (2021) measured the endurance capacity and mitochondrial respiration of five Aspidoscelis lizards, comparing sexual and asexual species and examining the relationship between endurance and mitochondrial respiration. This repository houses the data and coding files for the analyses.
 
+# Contents
+-   [Code Orientation](#code-orientation)
+
 ## Code Orientation
 
 Three code files contain the commands used for data analysis

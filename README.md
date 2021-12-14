@@ -38,7 +38,7 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 
 ### Data Analysis Walk-through
 
-1.  Within terminal navigate to the Code directory of the repository:
+Within terminal navigate to the Code directory of the repository:
 
     $ cd AmNat-Aspidoscelis-2021/Code
 
@@ -48,7 +48,7 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 
     $ R
 
-1.  Read in and prepare the data: 
+Read in and prepare the data: 
 
     > dat_phys_indiv <- read.csv("../SampleInformation/PhysiologyData_2019_Individuals.csv")
     > dat_phys_indiv$scSVL <- scale(dat_phys_indiv$SVL)

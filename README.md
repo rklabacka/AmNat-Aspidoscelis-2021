@@ -22,7 +22,7 @@ Three code files contain the commands used for data analysis
         + Effect of hybrid asexuality on each response variable
         + The effect of mitochondrial respiration on endurance capacity
 
-## System Requirements
+# System Requirements
 
 In order to run the analyses, [julia](https://julialang.org/downloads/) and [R](https://cran.r-project.org/doc/manuals/r-release/R-admin.html) are required languages.
 
@@ -44,7 +44,7 @@ The R packages [tidyverse](https://www.tidyverse.org/), [rstatix](https://www.rd
 [PhyloNet](http://old-bioinfo.cs.rice.edu/phylonet/#Downloads) (a standalone software package) is also required.
 
 
-## Data Analysis Walk-through
+# Data Analysis Walk-through
 
 1- Within terminal navigate to the Code directory of the repository:
 

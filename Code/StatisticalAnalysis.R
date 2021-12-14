@@ -16,9 +16,8 @@ library(wolakR) #<-- handy functions to work with MCMCglmm models
 
 ## All phylogenetic network analyses performed in the Julia package PhyloNetworks (see AspidoscelisReticAnalysis.jl)
 
-setwd("/path/to/gitHubRepo/Aspidoscelis-AmNat-2021/IndividualData")
 # Read in physiology data
-dat_phys_indiv <- read.csv("PhysiologyData_2019_Individuals.csv")
+dat_phys_indiv <- read.csv("../SampleInformation/PhysiologyData_2019_Individuals.csv")
 
 # - Prepare data
 ## -- Scale and center SVL
@@ -39,6 +38,7 @@ dat_phys_indiv %>% group_by(Sex) %>% group_by(Species) %>% summarize(m=mean(CII_
 ## **********************
 ## ****  Endurance  *****
 ## **********************
+# NOTE: Comparisons between models a and b (within both Model 1 and Model 2) is to check whether log-transformed data better fits the model.
 ## -- Model 1: No differences in variance between sexual modes
 endur_lme_1a <- lme(Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species)
 endur_lme_1b <- lme(Log.Endurance ~ SexualMode + scSVL, data = dat_phys_indiv, random = ~ 1 | Species)
@@ -55,6 +55,7 @@ plot(endur_lme_2b)
 summary(endur_lme_2b)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(Log.Endurance ~ SexualMode + scSVL, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -62,6 +63,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)
@@ -83,6 +87,7 @@ anova(CIS3_lme_1, CIS3_lme_2) # model 1 preferred, p = 0.8405
 summary(CIS3_lme_1)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(CI_State3 ~ SexualMode, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -90,6 +95,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)
@@ -111,6 +119,7 @@ anova(CIS4_lme_1, CIS4_lme_2) # model 2 preferred, p = 7e-04
 summary(CIS4_lme_2)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(CI_State4 ~ SexualMode, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -118,6 +127,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)
@@ -138,6 +150,7 @@ anova(CIRCR_lme_1, CIRCR_lme_2) # model 1 preferred, p = 0.37
 summary(CIRCR_lme_1)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(CI_RCR ~ SexualMode, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -145,6 +158,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)
@@ -165,6 +181,7 @@ anova(CIIS3_lme_1, CIIS3_lme_2) # model 2 preferred, p = 0.047
 summary(CIIS3_lme_2)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(CII_State3 ~ SexualMode, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -172,6 +189,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)
@@ -192,6 +212,7 @@ anova(CIIS4_lme_1, CIIS4_lme_2) # model 2 preferred, p = 0.004
 summary(CIIS4_lme_2)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(CII_State4 ~ SexualMode, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -199,6 +220,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)
@@ -219,6 +243,7 @@ anova(CIIRCR_lme_1, CIIRCR_lme_2) # model 1 preferred, p = 0.088
 summary(CIIRCR_lme_1)
 
 bootFunc=function(bootData,repeats){
+    tryCatch({
     # Fit model
     boot_lme <- lme(CII_RCR ~ SexualMode, data = bootData[repeats,], random = ~ 1 | Species, weights = varIdent(form = ~ 1 | SexualMode))
     # Extract standard deviation ratios
@@ -226,6 +251,9 @@ bootFunc=function(bootData,repeats){
     # Multiply standard deviation ratios by overall residual standard deviation
     boot_sds <- c(1, boot_sdrs) * boot_lme$sigma
     return(boot_sds)
+    },
+    error = function(err) {return(NA)}
+    )
 }
 
 sds <- boot(dat_phys_indiv, bootFunc, R=1000)

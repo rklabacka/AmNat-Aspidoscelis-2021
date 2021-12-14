@@ -141,11 +141,7 @@ This step should be performed for each variable of mito respiration
     > nsample <- 1000
     > BURN <- 3000; THIN <- 50; NITT <- BURN + nsample * THIN
 
-13- Set plotting environment:
-    
-    > par(mfrow=c(2,1))
-
-14- Create model:
+13- Create model:
 
     > endur_b <- MCMCglmm(Log.Endurance ~ SexualMode + scSVL,
     >   random = ~ Species,
@@ -154,7 +150,7 @@ This step should be performed for each variable of mito respiration
     >   prior = pr2,
     >   nitt = NITT, burnin = BURN, thin = THIN)
 
-15- Plot standard deviations for each repro mode:
+14- Plot standard deviations for each repro mode:
 
     > endur_b_sdPost <- sqrt(endur_b$VCV)
     > # Get mean values
@@ -174,7 +170,7 @@ Look at plot!
 The two plots show the posterior distribution of standard deviations for asexual species (top) and sexual species (bottom)
 
 
-16- Plot differences between coefficient of variation:
+15- Plot differences between coefficient of variation:
 
     > endur_cvdiffPost <- ((sqrt(endur_b$VCV[, 3]) / (endur_b$Sol[, 1] + endur_b$Sol[, 2]) - sqrt(endur_b$VCV[, 2]) / endur_b$Sol[, 1]))
     > endur_hpd <- HPDinterval(endur_cvdiffPost)
@@ -186,21 +182,61 @@ Look at plot!
 This is the difference in posterior distributions between the coefficient of variation.
 A distribution whose center is greater than 0 shows greater mean-corrected variation in the sexual species
 
-Steps 14-16 should be performed for each variable of mito respiration
+Steps 13-15 should be performed for each variable of mito respiration
 
-17- Subset and prepare data for within-group linear modeling:
+16- Subset and prepare data for within-group linear modeling:
 
     > dat_phys_tess <- subset(dat_phys_indiv, Species == 'tesselatus' | Species == 'marmoratus' | Species == 'septemvittatus')
     > # convert species to factor
     > dat_phys_tess$Species <- factor(dat_phys_tess$Species, ordered=FALSE)
 
-18- Examine effect of species on log.endurance:
+17- Examine effect of species on log.endurance:
 
     > tess_endur_lm <- lm(Log.Endurance~relevel(Species,ref="tesselatus")+SVL, dat_phys_tess) 
+    > summary(tess_endur_lm)
 
 Steps 17 and 18 should be done for each subgroup and each variable
 
+18- Close R interactive session:
 
+    > quit()
+
+If given option to save workspace, you can say N
+
+19- Begin interactive julia session:
+ 
+    $ julia
+
+20- Import species network:
+
+    julia> cd("Phylogenetics/PhyloNet")
+    julia> using PhyloNetworks
+    julia> species_network = "network.tre";
+    julia> spe_net = readTopology(species_network)
+    julia> # root tree
+    julia> spe_net_rooted = rootatnode!(spe_net, "septemvittatus")
+
+21- Import physiology data:
+
+    julia> using CSV
+    julia> using DataFrames
+    julia> cd("../../SampleInformation")
+    julia> dat_means = CSV.read("PhysiologyData_2019_Means.csv", DataFrame)
+
+22- Examine effect of hybrid asexuality on endurance:
+    
+    julia> using StatsModels
+    julia> PhyNetLM_endur = phylolm(@formula(LogEndurance ~ SexMode + SVL), dat_means, spe_net_rooted, y_mean_std=true, reml=false)
+
+Step 22 should be done for each variable
+
+23- Examine effect of mitochondrial respiration on endurance:
+
+    julia> using GLM
+    julia> PhyNetLM_CIS3endur  = phylolm(@formula(LogEndurance ~ CI_State3), dat_means, spe_net_rooted, y_mean_std=true, reml=false)
+    julia> r2(PhyNetLM_CIS3endur)
+
+Step 23 should be done for each variable of mito respiration
 
 # Sample Information
 

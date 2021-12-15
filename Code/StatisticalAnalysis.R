@@ -17,6 +17,7 @@ library(wolakR) #<-- handy functions to work with MCMCglmm models
 ## All phylogenetic network analyses performed in the Julia package PhyloNetworks (see AspidoscelisReticAnalysis.jl)
 
 # Read in physiology data
+# This is assuming the code was ran from the directory where it is stored
 dat_phys_indiv <- read.csv("../SampleInformation/PhysiologyData_2019_Individuals.csv")
 
 # - Prepare data

@@ -25,17 +25,18 @@ Three code files contain the commands used for data analysis
 # System Requirements
 
 In order to run the analyses, [julia](https://julialang.org/downloads/) and [R](https://cran.r-project.org/doc/manuals/r-release/R-admin.html) are required languages.
+Within this readme, you will see command prompts '$' (for bash), '>' (for R), and 'julia>' (for julia).
 
 Once you install julia, installing software packages is simply: 
 
-    $ using Pkg
-    $ Pkg.add("<package-name>")
+    julia> using Pkg
+    julia> Pkg.add("<package-name>")
 
 The julia packages [PhyloNetworks](http://crsl4.github.io/PhyloNetworks.jl/latest/man/installation/), [PhyloPlots](https://github.com/cecileane/PhyloPlots.jl), [CSV](https://juliapackages.com/p/csv), [StatsModels](https://juliastats.org/StatsModels.jl/stable/), [GLM](https://juliapackages.com/p/glm), and [DataFrames](https://dataframes.juliadata.org/stable/) are required. 
 
 Once you install R, installing software packages is typically:
 
-    $ install.packages("<package-name>")
+    > install.packages("<package-name>")
 
 However, some packages require a different installation approach, such as DevTools or install_github. Where this is needed, it is specified within the StatisticalAnalysis.R file.
 
